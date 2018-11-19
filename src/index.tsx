@@ -5,6 +5,19 @@ import { withClientState } from 'apollo-link-state';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloProvider } from 'react-apollo';
 
-const App = () => <div>Hello world</div>;
+import { resolvers, defaults, typeDefs } from './graphql';
+import App from './components/App';
 
-render(<App />, document.getElementById('root') as HTMLElement);
+const cache = new InMemoryCache();
+
+const client = new ApolloClient({
+  cache,
+  link: withClientState({ resolvers, defaults, cache, typeDefs }),
+});
+
+render(
+  <ApolloProvider client={client}>
+    <App />
+  </ApolloProvider>,
+  document.getElementById('root') as HTMLElement
+);
